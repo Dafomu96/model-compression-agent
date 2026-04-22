@@ -19,6 +19,9 @@ User Question
 [GEN] [NO ANS]
   │
   ▼
+[HALLUCINATION CHECK] → re-generate if not grounded
+  │
+  ▼
 Answer + Sources
 ```
 
@@ -80,4 +83,3 @@ llm = ChatOllama(model="llama3.2")
 - Neural network pruning (magnitude-based, structured, unstructured)
 - Knowledge distillation (response-based, feature-based)
 - Model quantization (post-training, quantization-aware training)
-
