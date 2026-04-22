@@ -1,0 +1,10 @@
+question,is_relevant,answer_length,answer_preview
+What is knowledge distillation and how does it compress neural networks?,True,1442,"Knowledge distillation is a technique used to compress neural networks by transferring knowledge from a larger, pre-trained model (the ""teacher"") to a smaller model (the ""student"") (Gou et al., 2021)."
+What are the main techniques for neural network pruning?,True,1041,"The main techniques for neural network pruning can be categorized into eight groups based on the underlying approach used. However, the paper focuses on three main categories: 
+
+1. **Magnitude-based p"
+How does quantization reduce the size of deep learning models?,True,808,"Quantization reduces the size of deep learning models by converting continuous floating-point numbers to discrete integer ones, which significantly reduces the memory footprint and computational overh"
+What is the difference between structured and unstructured pruning?,True,1053,"The main difference between structured and unstructured pruning is the level of granularity at which weights are pruned. 
+
+Unstructured pruning prunes individual weights anywhere in the network, allow"
+What is the lottery ticket hypothesis?,True,1341,"The lottery ticket hypothesis, proposed by Frankle and Carbin in 2019 [1], states that a randomly initialized neural network contains a sub-network that, when trained in isolation, can achieve compara"
