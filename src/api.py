@@ -17,6 +17,7 @@ class QueryResponse(BaseModel):
     question: str
     answer: str
     is_relevant: bool
+    is_grounded: bool
 
 @app.get("/health")
 def health():
@@ -28,10 +29,12 @@ def query(request: QueryRequest):
         "question": request.question,
         "documents": [],
         "generation": "",
-        "is_relevant": False
+        "is_relevant": False,
+        "is_grounded": False
     })
     return QueryResponse(
         question=request.question,
         answer=result["generation"],
-        is_relevant=result["is_relevant"]
+        is_relevant=result["is_relevant"],
+        is_grounded=result["is_grounded"]
     )

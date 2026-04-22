@@ -23,20 +23,24 @@ def run_evaluation():
             "question": question,
             "documents": [],
             "generation": "",
-            "is_relevant": False
+            "is_relevant": False,
+            "is_grounded": False
         })
         results.append({
             "question": question,
             "is_relevant": result["is_relevant"],
+            "is_grounded": result["is_grounded"],
             "answer_length": len(result["generation"]),
             "answer_preview": result["generation"][:200]
         })
-        status = "✓" if result["is_relevant"] else "✗"
+        status = "✓" if result["is_relevant"] and result["is_grounded"] else "✗"
         print(f"{status} {question[:60]}...")
 
     relevant = sum(1 for r in results if r["is_relevant"])
+    grounded = sum(1 for r in results if r["is_grounded"])
     print(f"\n=== RESULTADOS ===")
     print(f"Relevancia: {relevant}/{len(results)} ({relevant/len(results)*100:.0f}%)")
+    print(f"Fundamentado: {grounded}/{len(results)} ({grounded/len(results)*100:.0f}%)")
 
     import csv
     with open("data/evaluation_results.csv", "w", newline="", encoding="utf-8") as f:
