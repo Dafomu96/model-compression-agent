@@ -16,6 +16,7 @@ class AgentState(TypedDict):
     documents: List[str]
     generation: str
     is_relevant: bool
+    is_grounded: bool
 
 # --- Componentes ---
 def get_retriever():
@@ -69,11 +70,31 @@ def no_answer(state: AgentState) -> AgentState:
     print("--- NODO: NO ANSWER ---")
     return {"generation": "No encontré información relevante en los papers para responder esta pregunta."}
 
+def check_hallucination(state: AgentState) -> AgentState:
+    print("--- NODO: HALLUCINATION CHECK ---")
+    llm = get_llm()
+    documents = "\n\n".join(state["documents"])
+    generation = state["generation"]
+
+    messages = [
+        SystemMessage(content="""You are a grader checking if an answer is grounded in the provided documents.
+        Answer only 'yes' or 'no'. 'yes' if the answer is supported by the documents, 'no' if it contains information not found in the documents."""),
+        HumanMessage(content=f"Documents: {documents}\n\nAnswer: {generation}")
+    ]
+    result = llm.invoke(messages)
+    is_grounded = "yes" in result.content.lower()
+    return {"is_grounded": is_grounded}
+
 # --- Routing ---
 def route_after_grade(state: AgentState) -> str:
     if state["is_relevant"]:
         return "generate"
     return "no_answer"
+
+def route_after_hallucination(state: AgentState) -> str:
+    if state["is_grounded"]:
+        return END
+    return "generate"
 
 # --- Construcción del grafo ---
 def build_graph():
@@ -83,11 +104,13 @@ def build_graph():
     graph.add_node("grade", grade_documents)
     graph.add_node("generate", generate)
     graph.add_node("no_answer", no_answer)
+    graph.add_node("hallucination_check", check_hallucination)
 
     graph.set_entry_point("retrieve")
     graph.add_edge("retrieve", "grade")
     graph.add_conditional_edges("grade", route_after_grade)
-    graph.add_edge("generate", END)
+    graph.add_edge("generate", "hallucination_check")
+    graph.add_conditional_edges("hallucination_check", route_after_hallucination)
     graph.add_edge("no_answer", END)
 
     return graph.compile()
@@ -99,7 +122,8 @@ if __name__ == "__main__":
         "question": "What is knowledge distillation and how does it compress neural networks?",
         "documents": [],
         "generation": "",
-        "is_relevant": False
+        "is_relevant": False,
+        "is_grounded": False
     })
     print("\n=== RESPUESTA ===")
     print(result["generation"])
