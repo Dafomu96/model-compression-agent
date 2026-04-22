@@ -12,3 +12,5 @@ langgraph
 fastapi
 uvicorn
 tf-keras
+pyarrow
+pyarrow-hotfix
