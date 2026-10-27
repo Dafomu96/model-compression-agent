@@ -33,11 +33,7 @@ Answer + Sources
 - **Orchestration**: LangGraph
 - **API**: FastAPI
 
-## Results
-
-Evaluated on 5 domain-specific questions:
-- **Relevance**: 5/5 (100%)
-- Topics covered: knowledge distillation, pruning, quantization, lottery ticket hypothesis
+   Quick sanity check, not an evaluation: 5 questions I wrote (knowledge distillation, pruning, quantization, lottery ticket hypothesis), with relevance judged by the same LLM. All 5 answers were judged relevant (`data/evaluation_results.csv`). A real evaluation would need more questions and reference answers checked by a person.
 
 ## Setup
 
